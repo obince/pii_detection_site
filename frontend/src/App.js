@@ -58,7 +58,20 @@ function App() {
         history.push(`/form/${searchFormId}`);
       },1000);
     } else {
-      console.log('searchFormId2: ' + searchFormId);
+      let predictResponse = await axios({
+        url: "/predict/" + searchFormId,
+        method: "GET"
+      });
+      predictResponse = predictResponse.data;
+      if (predictResponse !== "None"){
+        console.log('searchFormId2: ' + searchFormId);
+        setTimeout(()=>{
+          history.push(`/form/${searchFormId}`);
+        },1000);
+      } else {
+        console.log('searchFormId3: ' + searchFormId);
+      }
+      console.log('searchFormId4: ' + searchFormId);
     }
   }
 

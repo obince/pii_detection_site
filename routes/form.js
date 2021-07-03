@@ -26,6 +26,7 @@ router.post("/create-suspect-form", async (req, res)=>{
 router.get("/get-suspect-form/:fid", async (req, res)=>{
     console.log(`Get suspected form id: ${req.params.fid}`);
     let response = await db.getSuspectForm(req.params.fid);
+    console.log(`Get suspected form id (response): ${response}`);
     res.status(200).send(response);
 });
 

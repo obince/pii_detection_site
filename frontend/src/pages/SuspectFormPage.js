@@ -117,19 +117,42 @@ export default function SuspectFormPage() {
             url:"/api/form/get-suspect-form/" + params.fid,
             method: "GET",
         });
-        response.data['entities'] = JSON.parse(response.data['entities']);
-        setFormData(response.data);
+
+        console.log("Response: ");
         console.log(response.data);
-        let initialDisable = true;
-        if (response.data.status === "TBD" || response.data.status === "MAYBE")
-            initialDisable = false;
-        setDisableButton(initialDisable);
+        if(!!response.data !== false){
+            response.data['entities'] = JSON.parse(response.data['entities']);
+            setFormData(response.data);
+            let initialDisable = true;
+            if (response.data.status === "TBD" || response.data.status === "MAYBE")
+                initialDisable = false;
+            setDisableButton(initialDisable);
+        } else {
+            let predictResponse = await axios({
+                url:"/predict/" + params.fid,
+                method: "GET",
+            });
+            console.log("Predict Response: ");
+            console.log(predictResponse.data);
+            if(predictResponse.data !== "None"){
+                let curData = {};
+                curData['entities'] = predictResponse.data;
+                curData['id'] = params.fid;
+                console.log("Current Data: ");
+                console.log(curData);
+                predictResponse.data = curData;
+                setFormData(predictResponse.data);
+                let initialDisable = false;
+                setDisableButton(initialDisable);
+            }
+        }
+
         setSrc("https://form.jotform.com/" + params.fid);
     }, [refresh]);
 
     if(formData == null){
         return (<Container className="mt-5">
-            <Spinner className="mt-5" style={{width:"35vw", height:"35vw"}} animation="border" variant="dark"/>
+            <Spinner className="mt-5" style={{width:"20vw", height:"20vw"}} animation="border" variant="dark"/>
         </Container>);
     }
 
