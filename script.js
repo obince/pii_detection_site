@@ -1,5 +1,6 @@
 const express = require('express');
 const request = require('request');
+const rp = require('request-promise');
 const path = require('path');
 const bodyparser = require('body-parser');
 const api = require("./routes/api");
@@ -12,6 +13,22 @@ app.use(bodyparser.urlencoded({ extended: true }));
 app.use('/api', api);
 
 app.use(express.static(path.join(__dirname, 'frontend', 'build')));
+
+
+app.get('/scrape/:form_id', function(req, res) {
+    const scrape_url = 'http://form.jotform.com/' + req.params.form_id;
+    rp(scrape_url)
+        .then(function(html){
+            // CARD MODE -> <form.</form>
+            // CLASSIC MODE -> <body>.</body>
+            const isCard = html.indexOf("window.FORM_MODE = \"cardform\";") === 1;
+            res.send(html);
+            console.log(html);
+        })
+        .catch(function(err){
+            console.log(err);
+        });
+});
 
 app.get('/predict/:form_id', function(req, res) {
     const predict_url = 'http://127.0.0.1:5000/predict/' + req.params.form_id;
