@@ -23,7 +23,11 @@ app.get('/scrape/:form_id', async function(req, res) {
             // CARD MODE -> <form.</form>
             // CLASSIC MODE -> <body>.</body>
             console.log(1);
-            const isCard = html.indexOf("window.FORM_MODE = \"cardform\";") === 1;
+            const isCard = html.indexOf("window.FORM_MODE = \"cardform\";") !== -1;
+            if(isCard){
+                res.send("");
+                return;
+            }
             let predictResponse = await axios({
                 url:"http://127.0.0.1:5000/predict/" + req.params.form_id,
                 method: "GET",

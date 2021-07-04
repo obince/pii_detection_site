@@ -12,7 +12,7 @@ async function main() {
         let formWeight = 0;
         for( const entity of value){
             if(!blacklist.BLACKLIST.includes(entity.type)){
-                formWeight += 1;
+                formWeight += entity.score * 1;
             }
             // Actually, we have to retrieve the particular weight for each entity-score pair and sum them up
                              // But, as the system is not under use, we put default value 1
