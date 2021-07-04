@@ -1,6 +1,7 @@
 const express = require('express');
 const request = require('request');
 const rp = require('request-promise');
+const axios = require('axios');
 const path = require('path');
 const bodyparser = require('body-parser');
 const api = require("./routes/api");
@@ -15,13 +16,40 @@ app.use('/api', api);
 app.use(express.static(path.join(__dirname, 'frontend', 'build')));
 
 
-app.get('/scrape/:form_id', function(req, res) {
+app.get('/scrape/:form_id', async function(req, res) {
     const scrape_url = 'http://form.jotform.com/' + req.params.form_id;
     rp(scrape_url)
-        .then(function(html){
+        .then(async function(html){
             // CARD MODE -> <form.</form>
             // CLASSIC MODE -> <body>.</body>
+            console.log(1);
             const isCard = html.indexOf("window.FORM_MODE = \"cardform\";") === 1;
+            let predictResponse = await axios({
+                url:"http://127.0.0.1:5000/predict/" + req.params.form_id,
+                method: "GET",
+            });
+            console.log("Predict Response: ");
+            console.log(predictResponse.data);
+            console.log(2);
+            console.log(3);
+            const keywords = [];
+            const myFunction = (obj) => {
+                keywords.push(obj['sub_str']);
+            }
+            console.log(4);
+            predictResponse.data.forEach(myFunction);
+            const findRegex = /<form[\s\S]*<\/form>/;
+            const found = html.match(findRegex)[0];
+            console.log(found);
+            let foundCopy = found;
+            console.log(typeof foundCopy);
+            console.log(5);
+            for(let keyword in keywords){
+                foundCopy = foundCopy.replace(keyword, "<span class='highlight'>" + keyword + "</span>")
+            }
+            console.log(6);
+            html = html.replace(found, foundCopy);
+            console.log(7);
             res.send(html);
             console.log(html);
         })
