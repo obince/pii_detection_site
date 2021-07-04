@@ -34,24 +34,21 @@ app.get('/scrape/:form_id', async function(req, res) {
             console.log(3);
             const keywords = [];
             const myFunction = (obj) => {
-                keywords.push(obj['sub_str']);
+                keywords.push(obj['substr']);
             }
             console.log(4);
             predictResponse.data.forEach(myFunction);
             const findRegex = /<form[\s\S]*<\/form>/;
-            const found = html.match(findRegex)[0];
-            console.log(found);
+            let found = html.match(findRegex)[0];
             let foundCopy = found;
-            console.log(typeof foundCopy);
             console.log(5);
-            for(let keyword in keywords){
-                foundCopy = foundCopy.replace(keyword, "<span class='highlight'>" + keyword + "</span>")
+            for(let keyword of keywords){
+                foundCopy = foundCopy.replace(keyword, "<span style=\"background-color: yellow\">" + keyword + "</span>");
             }
             console.log(6);
             html = html.replace(found, foundCopy);
             console.log(7);
             res.send(html);
-            console.log(html);
         })
         .catch(function(err){
             console.log(err);
