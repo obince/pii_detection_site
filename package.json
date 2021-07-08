@@ -17,6 +17,7 @@
     "express": "^4.17.1",
     "express-handlebars": "^5.3.2",
     "mysql": "^2.18.1",
+    "node-sass": "^4.14.1",
     "react-jotform-embed": "^1.1.1",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
