@@ -1,7 +1,7 @@
 # JotForm - PII Detection Manual Review System
  
 ## Implementation
-I used Node.js, Express.js, and MySQL for the backend of this application. For the frontend, I used React, axios, HTML, CSS. I did tests and experiments on a local database, using XAMPP and PHPMyAdmin.
+I used Node.js, Express.js, Flask, and MySQL for the backend of this application. For the frontend, I used React, axios, HTML, CSS. I did tests and experiments on a local database, using XAMPP and PHPMyAdmin.
 
 ## Running
 In order to run this project, first you have to create database specifically for this project. My table name is "pii_db" as it can be seen in the config.js file. After the creation of database, you have to modify the config.js file for your own database.
